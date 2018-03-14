@@ -1,2 +1,2 @@
-# etl-toolkit
-ETL toolkit - general components for managing the retrieval and processing of data 
+# ETL toolkit
+> General components for managing the retrieval and processing of data 

@@ -1,0 +1,45 @@
+{
+  "name": "etl-toolkit",
+  "version": "0.1.0",
+  "description": "general components for managing the retrieval and processing of data",
+  "main": "index.js",
+  "repository": "https://github.com/nhsuk/etl-toolkit",
+  "author": "mark <markharrop@yahoo.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "async": "^2.6.0",
+    "nhsuk-bunyan-logger": "^1.8.0"
+  },
+  "scripts": {
+    "coverage-check": "istanbul check-coverage --config .istanbul.yml",
+    "coverage-generate": "yarn istanbul cover -- _mocha -- --recursive test",
+    "git-hook": "yarn lint && yarn coverage-generate && yarn coverage-check",
+    "istanbul": "NODE_ENV=test istanbul",
+    "lint": "eslint --ext .js,.json .",
+    "test": "NODE_ENV=test mocha --recursive test",
+    "test-ci": "yarn lint && yarn coverage-generate && yarn coverage-check && yarn coverage-upload-coveralls",
+    "test-integration": "NODE_ENV=test mocha --recursive test/integration",
+    "test-unit": "NODE_ENV=test mocha --recursive test/unit",
+    "test-watch": "yarn test --watch --reporter min",
+    "test-watch-integration": "yarn test-integration --watch --reporter min",
+    "test-watch-unit": "yarn test-unit --watch --reporter min"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-config-nhsuk": "^0.8.0",
+    "eslint-plugin-import": "^2.6.1",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-watch": "^3.1.2",
+    "husky": "^0.14.2",
+    "istanbul": "^1.1.0-alpha.1",
+    "mocha": "^5.0.0",
+    "nock": "^9.0.14",
+    "nodemon": "^1.11.0",
+    "snyk": "^1.40.2"
+  }
+}

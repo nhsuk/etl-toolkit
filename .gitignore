@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# Ignore output files
+output/
+
+# ignore OSX system file
+.DS_Store
