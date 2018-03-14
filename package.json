@@ -2,11 +2,15 @@
   "name": "etl-toolkit",
   "version": "0.1.0",
   "description": "general components for managing the retrieval and processing of data",
-  "main": "index.js",
+  "main": "etlToolkit.js",
   "repository": "https://github.com/nhsuk/etl-toolkit",
   "author": "mark <markharrop@yahoo.com>",
   "license": "MIT",
   "private": false,
+  "peer-dependencies": {
+    "async": "^2.6.0",
+    "nhsuk-bunyan-logger": "^1.8.0"
+  },
   "dependencies": {
     "async": "^2.6.0",
     "nhsuk-bunyan-logger": "^1.8.0"
