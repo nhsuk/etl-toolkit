@@ -3,9 +3,9 @@ const populateRecordsFromIds = require('./lib/queues/populateRecordsFromIds');
 const etlStore = require('./lib/etlStore');
 
 module.exports = {
+  etlStore,
   queues: {
     populateIds,
-    populateRecordsFromIds
+    populateRecordsFromIds,
   },
-  etlStore
 };
