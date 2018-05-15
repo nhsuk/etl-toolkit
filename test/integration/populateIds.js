@@ -1,7 +1,19 @@
 const chai = require('chai');
 
-const populateIds = require('../../lib/queues/populateIds');
-const etlStore = require('../../lib/etlStore');
+const EtlStore = require('../../lib/etlStore');
+const PopulateIdsQueue = require('../../lib/queues/populateIds');
+
+const outputFilename = 'test-data.json';
+const seedIdFilename = 'test-data-seed-ids.json';
+const idKey = 'id';
+const infos = [];
+const errors = [];
+const log = {
+  error: (error) => { errors.push(error); },
+  info: (status) => { infos.push(status); },
+};
+
+const etlStore = new EtlStore({ idKey, outputFilename, seedIdFilename });
 
 const expect = chai.expect;
 
@@ -10,6 +22,7 @@ function getIdsAction(pageNo) {
     resolve([pageNo + 10, pageNo + 20]);
   });
 }
+
 function getIdsWithErrorAction(pageNo) {
   return new Promise((resolve) => {
     if (pageNo === 2) {
@@ -32,13 +45,11 @@ function assertEtlStore() {
 describe('Populate ID queue', () => {
   beforeEach(() => {
     etlStore.clearState();
-    populateIds.clearState();
-    etlStore.setIdKey('id');
   });
 
   it('should populate etlStore with loaded ids', (done) => {
+    const populateIds = new PopulateIdsQueue({ etlStore, getIdsAction, log });
     const options = {
-      getIdsAction,
       queueComplete: () => {
         assertEtlStore();
         done();
@@ -50,8 +61,8 @@ describe('Populate ID queue', () => {
   });
 
   it('should call queueComplete for zero pages', (done) => {
+    const populateIds = new PopulateIdsQueue({ etlStore, getIdsAction: () => { done('should not have been called'); }, log });
     const options = {
-      getIdsAction: () => { done('should not have been called'); },
       queueComplete: () => {
         done();
       },
@@ -67,19 +78,19 @@ describe('Populate ID queue', () => {
       done();
     };
 
+    const populateIds = new PopulateIdsQueue({ etlStore, getIdsAction, log });
     const options = {
-      getIdsAction: () => { done('should not have been called'); },
       queueComplete,
       totalPages: 2,
       workers: 1,
     };
 
     const restartQueue = () => {
+      populateIds.getIdsAction = () => { done('should not have been called'); };
       populateIds.start(options);
     };
 
     const restartOptions = {
-      getIdsAction,
       queueComplete: restartQueue,
       totalPages: 2,
       workers: 1,
@@ -89,8 +100,12 @@ describe('Populate ID queue', () => {
   });
 
   it('should gracefully handle errors', (done) => {
-    const options = {
+    const populateIds = new PopulateIdsQueue({
+      etlStore,
       getIdsAction: getIdsWithErrorAction,
+      log
+    });
+    const options = {
       queueComplete: () => {
         const ids = etlStore.getIds();
         expect(ids.length).to.equal(4);
