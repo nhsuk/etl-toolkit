@@ -8,6 +8,13 @@ const expect = chai.expect;
 const outputFile = 'test-data.json';
 const idKey = 'identifier';
 
+let infos = [];
+let errors = [];
+const log = {
+  error: (error) => { errors.push(error); },
+  info: (status) => { infos.push(status); },
+};
+
 function readAsJson(path) {
   return JSON.parse(fs.readFileSync(path, 'utf8'));
 }
@@ -22,8 +29,10 @@ function addSampleData() {
 
 describe('ETL store', () => {
   beforeEach(() => {
-    etlStore = new EtlStore({ idKey, outputFile });
+    etlStore = new EtlStore({ idKey, log, outputFile });
     etlStore.clearState();
+    infos = [];
+    errors = [];
   });
 
   it('constructor should throw error if outputFile not provided', () => {
@@ -86,10 +95,9 @@ describe('ETL store', () => {
       const message = '500 error on services';
       etlStore.addFailedId('2', 'services', message);
       etlStore.addRecord({ identifier: '3' });
-      const result = [];
-      etlStore.writeStatus({ info: (status) => { result.push(status); } });
-      expect(result[0]).to.equal('1 IDs failed: 2');
-      expect(result[1]).to.equal('See \'summary.json\' for full details');
+      etlStore.writeStatus();
+      expect(infos[0]).to.equal('1 IDs failed: 2');
+      expect(infos[1]).to.equal('See \'summary.json\' for full details');
     });
 
     it('saveSummary should write report of date, total scanned, total errored IDs and failure details', () => {

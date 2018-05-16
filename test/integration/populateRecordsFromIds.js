@@ -18,7 +18,7 @@ function populateRecordAction(id) {
     resolve({ id });
   });
 }
-const etlStore = new EtlStore({ idKey, outputFile });
+const etlStore = new EtlStore({ idKey, log, outputFile });
 
 const expect = chai.expect;
 

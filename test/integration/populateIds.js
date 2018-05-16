@@ -5,14 +5,14 @@ const PopulateIdsQueue = require('../../lib/queues/populateIds');
 
 const outputFile = 'test-data';
 const idKey = 'id';
-const infos = [];
-const errors = [];
+let infos = [];
+let errors = [];
 const log = {
   error: (error) => { errors.push(error); },
   info: (status) => { infos.push(status); },
 };
 
-const etlStore = new EtlStore({ idKey, outputFile });
+const etlStore = new EtlStore({ idKey, log, outputFile });
 
 const expect = chai.expect;
 
@@ -43,6 +43,8 @@ function assertEtlStore() {
 
 describe('Populate ID queue', () => {
   beforeEach(() => {
+    infos = [];
+    errors = [];
     etlStore.clearState();
   });
 
