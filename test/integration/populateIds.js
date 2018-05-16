@@ -3,8 +3,7 @@ const chai = require('chai');
 const EtlStore = require('../../lib/etlStore');
 const PopulateIdsQueue = require('../../lib/queues/populateIds');
 
-const outputFilename = 'test-data.json';
-const seedIdFilename = 'test-data-seed-ids.json';
+const outputFile = 'test-data';
 const idKey = 'id';
 const infos = [];
 const errors = [];
@@ -13,7 +12,7 @@ const log = {
   info: (status) => { infos.push(status); },
 };
 
-const etlStore = new EtlStore({ idKey, outputFilename, seedIdFilename });
+const etlStore = new EtlStore({ idKey, outputFile });
 
 const expect = chai.expect;
 

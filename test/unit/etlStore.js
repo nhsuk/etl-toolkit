@@ -5,8 +5,7 @@ const EtlStore = require('../../lib/etlStore');
 
 let etlStore;
 const expect = chai.expect;
-const outputFilename = 'test-data.json';
-const seedIdFilename = 'test-data-seed-ids.json';
+const outputFile = 'test-data.json';
 const idKey = 'identifier';
 
 function readAsJson(path) {
@@ -23,8 +22,12 @@ function addSampleData() {
 
 describe('ETL store', () => {
   beforeEach(() => {
-    etlStore = new EtlStore({ idKey, outputFilename, seedIdFilename });
+    etlStore = new EtlStore({ idKey, outputFile });
     etlStore.clearState();
+  });
+
+  it('constructor should throw error if outputFile not provided', () => {
+    expect(() => new EtlStore({ idKey })).to.throw('\'outputFile\' must be provided');
   });
 
   describe('key management', () => {
@@ -115,16 +118,6 @@ describe('ETL store', () => {
       expect(seedIds[0]).to.equal('1');
       expect(seedIds[1]).to.equal('2');
       expect(seedIds[2]).to.equal('3');
-    });
-
-    it('seedIdFilename ashould be optional in EtlStore config', () => {
-      etlStore = new EtlStore({ idKey, outputFilename });
-      addSampleData();
-      const output = readAsJson(`output/${etlStore.outputFilename}`);
-      expect(output.length).to.equal(3);
-      expect(output[0].identifier).to.equal('1');
-      expect(output[1].identifier).to.equal('2');
-      expect(output[2].identifier).to.equal('3');
     });
   });
 });
