@@ -1,7 +1,8 @@
 const chai = require('chai');
 
-const fsHelper = require('../../lib/utils/fsHelper');
+const FsHelper = require('../../lib/utils/fsHelper');
 
+const fsHelper = new FsHelper({ error: () => { }, info: () => { } });
 const expect = chai.expect;
 
 describe('fsHelper', () => {
