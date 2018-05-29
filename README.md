@@ -17,8 +17,29 @@
 
 ## ETL Store
 
-The `etlStore` manages the state of the ETL including IDs, loaded records, and a list of errored IDs.
+The `EtlStore` manages the state of the ETL including IDs, loaded records, and a list of errored IDs.
 The store can persist state to the local file system during queue processing enabling an ETL to continue after interruption.
+
+The `EtlStore` is a class and can be constructed as below:
+```
+const etlStore = new EtlStore({ idKey, log, outputFile);
+```
+Where `idKey` is the property on the object by which it is uniquely identified, i.e. `id`;
+`log` is a logging framework that has `info` and `error` functions.
+`outputFile` is the name of the file the EltStore will write to, i.e. `pharmacy-data`;
+
+Optional config settings are:
+
+`outputDir`: local output folder. Defaults to `output`
+
+`cacheIdFilename`: local ID cache file. Defaults to `cache-ids.json`
+
+`cacheDataFilename`: local data cache file. Defaults to `cache-data.json`
+
+`summaryFilename`: summary file name. Defaults to `summary.json`
+
+When the `saveRecords` function is called,  items in the store will be saved to `{outputFile}.json`, and IDs will be saved to
+`{outputFile}-seed-ids.json`.
 
 ## Environment variables
 
